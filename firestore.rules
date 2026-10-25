@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Academic Prototype Note:
+    // This deployment demonstrates a college minor project with a simplified no-auth workflow.
+    // In production, real student data requires Firebase Authentication and strict RBAC.
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    match /students/{studentId} {
+      allow read, write: if isValidId(studentId);
+
+      match /semesters/{semesterId} {
+        allow read, write: if isValidId(semesterId);
+      }
+    }
+
+    match /faculty/{facultyId} {
+      allow read, write: if isValidId(facultyId);
+    }
+
+    match /achievements/{achievementId} {
+      allow read, write: if isValidId(achievementId);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

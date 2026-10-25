@@ -1,0 +1,6 @@
+{
+  "name": "CampusTrack AI",
+  "description": "AI-Based Student Academic Growth and Achievement Management System",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

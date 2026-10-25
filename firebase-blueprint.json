@@ -1,0 +1,241 @@
+{
+  "entities": {
+    "StudentProfile": {
+      "title": "Student Profile",
+      "description": "Student profile data for academic tracking",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique student identifier"
+        },
+        "rollNumber": {
+          "type": "string",
+          "description": "College Roll Number / Registration ID",
+          "maxLength": 64
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Student's full name",
+          "maxLength": 128
+        },
+        "collegeEmail": {
+          "type": "string",
+          "description": "Student's college email address",
+          "maxLength": 128
+        },
+        "branch": {
+          "type": "string",
+          "description": "Department or Branch of study",
+          "maxLength": 64
+        },
+        "currentSemester": {
+          "type": "number",
+          "description": "Current semester (1-8)"
+        },
+        "skills": {
+          "type": "array",
+          "description": "List of student technical and soft skills"
+        },
+        "careerInterests": {
+          "type": "array",
+          "description": "Target career paths and interests"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      },
+      "required": ["rollNumber", "fullName", "collegeEmail", "branch", "currentSemester"]
+    },
+    "FacultyProfile": {
+      "title": "Faculty Profile",
+      "description": "Faculty member profile for review workflows",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Faculty identifier"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Faculty member's name",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "description": "Faculty member's college email",
+          "maxLength": 128
+        },
+        "department": {
+          "type": "string",
+          "description": "Department",
+          "maxLength": 64
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        }
+      },
+      "required": ["fullName", "email"]
+    },
+    "SemesterRecord": {
+      "title": "Semester Record",
+      "description": "Academic grades and SGPA per semester",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Semester record ID"
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Reference to student ID"
+        },
+        "rollNumber": {
+          "type": "string",
+          "description": "Student roll number"
+        },
+        "semesterNumber": {
+          "type": "number",
+          "description": "Semester number between 1 and 8"
+        },
+        "sgpa": {
+          "type": "number",
+          "description": "Semester Grade Point Average"
+        },
+        "subjects": {
+          "type": "array",
+          "description": "List of subjects with marks/grades"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["unverified", "verified"],
+          "description": "Faculty verification status"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of last edit"
+        }
+      },
+      "required": ["studentId", "rollNumber", "semesterNumber"]
+    },
+    "AchievementSubmission": {
+      "title": "Achievement Submission",
+      "description": "Student achievement submission with supporting document and verification status",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Achievement ID"
+        },
+        "studentId": {
+          "type": "string",
+          "description": "Student ID"
+        },
+        "rollNumber": {
+          "type": "string",
+          "description": "Student Roll Number"
+        },
+        "studentName": {
+          "type": "string",
+          "description": "Student Name"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Student Branch"
+        },
+        "title": {
+          "type": "string",
+          "description": "Achievement Title",
+          "maxLength": 200
+        },
+        "category": {
+          "type": "string",
+          "description": "Achievement Category"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the achievement"
+        },
+        "organization": {
+          "type": "string",
+          "description": "Issuing institution, company, or organizer",
+          "maxLength": 150
+        },
+        "completionDate": {
+          "type": "string",
+          "description": "Date of completion or issuance"
+        },
+        "documentUrl": {
+          "type": "string",
+          "description": "URL to the supporting certificate/document"
+        },
+        "documentName": {
+          "type": "string",
+          "description": "Name of uploaded document"
+        },
+        "projectUrl": {
+          "type": "string",
+          "description": "Optional project or portfolio repository URL"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "verified", "rejected"],
+          "description": "Current review status"
+        },
+        "facultyFeedback": {
+          "type": "string",
+          "description": "Reviewer comments, especially required on rejection"
+        },
+        "reviewedByFacultyName": {
+          "type": "string",
+          "description": "Name of reviewing faculty member"
+        },
+        "reviewedByFacultyEmail": {
+          "type": "string",
+          "description": "Email of reviewing faculty member"
+        },
+        "reviewedAt": {
+          "type": "string",
+          "description": "Decision timestamp"
+        },
+        "pointsAwarded": {
+          "type": "number",
+          "description": "Points awarded if verified"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["studentId", "rollNumber", "title", "category", "organization", "completionDate", "status"]
+    }
+  },
+  "firestore": {
+    "/students/{studentId}": {
+      "schema": "StudentProfile",
+      "description": "Student records indexed by studentId or rollNumber hash"
+    },
+    "/faculty/{facultyId}": {
+      "schema": "FacultyProfile",
+      "description": "Faculty profiles"
+    },
+    "/students/{studentId}/semesters/{semesterId}": {
+      "schema": "SemesterRecord",
+      "description": "Semester academic records"
+    },
+    "/achievements/{achievementId}": {
+      "schema": "AchievementSubmission",
+      "description": "All student achievement submissions"
+    }
+  }
+}
